@@ -32,9 +32,6 @@ public class DoctorController {
 	@Autowired
 	DoctorService doctorService;
 
-	
-
-
 	@Operation(summary = "Add doctor")
 	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "doctor created"),
 							@ApiResponse(responseCode = "400"),

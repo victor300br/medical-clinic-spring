@@ -65,4 +65,12 @@ public class DoctorService {
 	    }
 	    doctorRepository.deleteById(id);
 	}
+	
+	public Doctor authenticate(String email, String password) {
+	    Doctor doctor = doctorRepository.findByEmail(email);
+	    if (doctor == null || !doctor.getPassword().equals(password)) {
+	        throw new NotFoundException(Doctor.class, "email", email.toString());
+	    }
+	    return doctor;
+	}
 }
