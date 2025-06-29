@@ -1,9 +1,9 @@
 package br.uece.clinic.api.model;
 
-import java.io.Serializable;
-
+import java.util.Date;
 
 import br.uece.clinic.api.request.dto.DoctorCreateRequestDTO;
+import br.uece.clinic.api.request.dto.PatientCreateRequestDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,13 +17,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "doctor", schema = "public")
+@Table(name = "Patient", schema = "public")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @NoArgsConstructor
-public class Doctor implements Serializable {
-
+public class Patient {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -40,21 +40,17 @@ public class Doctor implements Serializable {
 	private String password;
 	
 	@Column(nullable = false)
-	private String speciality;
+	private Date dateOfBirth;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String healthPlan;
 	
-	public Doctor(DoctorCreateRequestDTO DoctorRequestDTO) {
-		this.email = DoctorRequestDTO.getEmail();
-		this.name = DoctorRequestDTO.getName();
-		this.password = DoctorRequestDTO.getPassword();
-		this.speciality = DoctorRequestDTO.getSpeciality();
-		this.healthPlan = DoctorRequestDTO.getHealthPlan();
+	public Patient(PatientCreateRequestDTO PatientRequestDTO) {
+		this.email = PatientRequestDTO.getEmail();
+		this.name = PatientRequestDTO.getName();
+		this.password = PatientRequestDTO.getPassword();
+		this.dateOfBirth = PatientRequestDTO.getDateOfBirth();
+		this.healthPlan = PatientRequestDTO.getHealthPlan();
 	}
-
-
-
-
 
 }
