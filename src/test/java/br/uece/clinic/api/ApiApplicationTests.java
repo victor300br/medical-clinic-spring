@@ -1,10 +1,10 @@
-package com.exemple.medical_clinic_spring;
+package br.uece.clinic.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MedicalClinicSpringApplicationTests {
+class ApiApplicationTests {
 
 	@Test
 	void contextLoads() {
