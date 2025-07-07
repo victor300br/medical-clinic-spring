@@ -20,8 +20,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/api/auth/**", //mudar depois pra que o medico consiga só alterar o dele
-                    "/api/doctor",          
-                    "/swagger-ui/**",  
+                    "/api/doctor",
+                        "/api/patient",
+                        "/swagger-ui/**",
                     "/v3/api-docs/**",        
                     "/swagger-resources/**"   
                 ).permitAll()
