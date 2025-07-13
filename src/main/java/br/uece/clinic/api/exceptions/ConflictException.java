@@ -11,6 +11,9 @@ public class ConflictException extends HttpException{
 	public ConflictException(Object obj) {
 		super("Element " + obj.toString() + " already found in database.");
 	}
+	public ConflictException(String message) {
+		super(message);
+	}
 	
 	@Override
 	public HttpStatus getHttpStatus() {
