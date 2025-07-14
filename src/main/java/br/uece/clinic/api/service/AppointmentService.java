@@ -7,6 +7,7 @@ import br.uece.clinic.api.repository.AppointmentRepository;
 import br.uece.clinic.api.repository.DoctorRepository;
 import br.uece.clinic.api.repository.PatientRepository;
 import br.uece.clinic.api.request.dto.AvailableTimesRequestDTO;
+import br.uece.clinic.api.request.dto.CompleteAppointmentRequestDTO;
 import br.uece.clinic.api.request.dto.AppointmentRequestDTO;
 import br.uece.clinic.api.response.dto.AppointmentResponseDTO;
 import br.uece.clinic.api.response.dto.AvailableTimesResponseDTO;
@@ -134,28 +135,9 @@ public class AppointmentService {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new NotFoundException(Patient.class, "id", patientId.toString()));
         
-        List<Appointment> appointments = appointmentRepository.findByPatient(patient);
-        
-        appointments.forEach(this::updateAppointmentStatusIfPassed);
-        
-        return appointments.stream()
+        return appointmentRepository.findByPatient(patient).stream()
                 .map(AppointmentResponseDTO::new)
                 .collect(Collectors.toList());
-    }
-
-    @Transactional
-    private void updateAppointmentStatusIfPassed(Appointment appointment) {
-        if (appointment.getStatus() == Appointment.AppointmentStatus.SCHEDULED && 
-            isAppointmentTimePassed(appointment)) {
-            
-            appointment.setStatus(Appointment.AppointmentStatus.COMPLETED);
-            appointmentRepository.save(appointment);
-        }
-    }
-
-    private boolean isAppointmentTimePassed(Appointment appointment) {
-        LocalDateTime appointmentDateTime = LocalDateTime.of(appointment.getDate(), appointment.getTime());
-        return LocalDateTime.now().isAfter(appointmentDateTime);
     }
 
     @Transactional
@@ -182,5 +164,24 @@ public class AppointmentService {
             nextAppointment.setStatus(Appointment.AppointmentStatus.SCHEDULED);
             appointmentRepository.save(nextAppointment);
         }
+    }
+    
+    @Transactional
+    public AppointmentResponseDTO completeAppointment(Long id, CompleteAppointmentRequestDTO completeDTO) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Appointment.class, "id", id.toString()));
+        
+        if (appointment.getStatus() != Appointment.AppointmentStatus.SCHEDULED) {
+            throw new IllegalStateException("Somente consultas agendadas podem ser completadas");
+        }
+        
+        appointment.setStatus(Appointment.AppointmentStatus.COMPLETED);
+        appointment.setConsultationNotes(completeDTO.getConsultationNotes());
+        
+        if (appointment.getPatient().getHealthPlan() == null) {
+            appointment.setConsultationFee(completeDTO.getConsultationFee());
+        }
+        
+        return new AppointmentResponseDTO(appointmentRepository.save(appointment));
     }
 }

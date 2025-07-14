@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,9 +31,9 @@ public class Review {
     private Appointment appointment;
 
     @Column(nullable = false)
-    private Integer rating; // essas sao as estrelas ai tem que ver como vai ficar no front
+    private Integer rating; //as estrelas vao ficar no front
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String comment;
 
     @Column(nullable = false)

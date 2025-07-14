@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import br.uece.clinic.api.exceptions.ConflictException;
 import br.uece.clinic.api.exceptions.NotFoundException;
 import br.uece.clinic.api.model.Doctor;
+import br.uece.clinic.api.model.Review;
 import br.uece.clinic.api.repository.DoctorRepository;
+import br.uece.clinic.api.repository.ReviewRepository;
 import br.uece.clinic.api.request.dto.DoctorCreateRequestDTO;
 import br.uece.clinic.api.response.dto.DoctorResponseDTO;
 
@@ -20,6 +22,8 @@ public class DoctorService {
 	
 	@Autowired
 	DoctorRepository doctorRepository;
+	
+	ReviewRepository reviewRepository;
 
 	
 	public void add(DoctorCreateRequestDTO doctorRequest)
@@ -28,7 +32,7 @@ public class DoctorService {
 		if (doctorRepository.findByEmail(doctorRequest.getEmail()) != null)
 			throw new ConflictException(doctorRequest);
 
-		doctorRequest.setPassword(doctorRequest.getPassword()); //arrumar isso depois
+		doctorRequest.setPassword(doctorRequest.getPassword());
 		Doctor newDoctor = new Doctor(doctorRequest);
 
 		doctorRepository.save(newDoctor);
@@ -72,5 +76,19 @@ public class DoctorService {
 	        throw new NotFoundException(Doctor.class, "email", email.toString());
 	    }
 	    return doctor;
+	}
+	
+	public void updateDoctorRating(Long doctorId) {
+	    Doctor doctor = doctorRepository.findById(doctorId)
+	            .orElseThrow(() -> new NotFoundException(Doctor.class, "id", doctorId.toString()));
+	    
+	    Double averageRating = doctorRepository.calculateAverageRatingByDoctor(doctorId);
+	    doctor.setAverageRating(averageRating != null ? averageRating : 0.0);
+	    
+	    doctorRepository.save(doctor);
+	}
+
+	public List<Review> getLastThreeReviews(Long doctorId) {
+	    return reviewRepository.findTop3ByDoctorIdOrderByCreatedAtDesc(doctorId);
 	}
 }

@@ -39,4 +39,10 @@ public class Appointment {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status;
+    
+    @Column(columnDefinition = "TEXT")
+    private String consultationNotes;
+    
+    @Column
+    private Double consultationFee;
 }

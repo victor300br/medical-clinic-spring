@@ -1,6 +1,7 @@
 package br.uece.clinic.api.controller;
 
 import br.uece.clinic.api.request.dto.AvailableTimesRequestDTO;
+import br.uece.clinic.api.request.dto.CompleteAppointmentRequestDTO;
 import br.uece.clinic.api.request.dto.AppointmentRequestDTO;
 import br.uece.clinic.api.response.dto.AppointmentResponseDTO;
 import br.uece.clinic.api.response.dto.AvailableTimesResponseDTO;
@@ -71,5 +72,20 @@ public class AppointmentController {
     public ResponseEntity<Void> cancelAppointment(@PathVariable Long id) throws NotFoundException {
         appointmentService.cancelAppointment(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    @Operation(summary = "Complete an appointment")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Appointment completed"),
+        @ApiResponse(responseCode = "404", description = "Appointment not found"),
+        @ApiResponse(responseCode = "400", description = "Appointment cannot be completed")
+    })
+    @PutMapping("/{id}/complete")
+    public ResponseEntity<AppointmentResponseDTO> completeAppointment(
+            @PathVariable Long id,
+            @RequestBody CompleteAppointmentRequestDTO completeDTO) {
+        
+        AppointmentResponseDTO response = appointmentService.completeAppointment(id, completeDTO);
+        return ResponseEntity.ok(response);
     }
 }

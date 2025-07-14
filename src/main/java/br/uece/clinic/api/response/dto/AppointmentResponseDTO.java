@@ -14,6 +14,9 @@ public class AppointmentResponseDTO {
     private LocalTime time;
     private String status;
     private boolean isWaitingList;
+    private String consultationNotes;
+    private Double consultationFee;
+    private boolean requiresPayment;
 
     public AppointmentResponseDTO(Appointment appointment) {
         this.id = appointment.getId();
@@ -23,5 +26,8 @@ public class AppointmentResponseDTO {
         this.time = appointment.getTime();
         this.status = appointment.getStatus().toString();
         this.isWaitingList = appointment.getStatus() == Appointment.AppointmentStatus.WAITING_LIST;
+        this.consultationNotes = appointment.getConsultationNotes();
+        this.consultationFee = appointment.getConsultationFee();
+        this.requiresPayment = appointment.getConsultationFee() != null;
     }
 }
