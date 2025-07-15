@@ -88,4 +88,17 @@ public class AppointmentController {
         AppointmentResponseDTO response = appointmentService.completeAppointment(id, completeDTO);
         return ResponseEntity.ok(response);
     }
+    
+    @Operation(summary = "Get appointments by doctor ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Appointments retrieved"),
+            @ApiResponse(responseCode = "404", description = "Doctor not found")
+    })
+    @GetMapping("/doctor/{doctorId}")
+    public ResponseEntity<List<AppointmentResponseDTO>> getDoctorAppointments(@PathVariable Long doctorId)
+            throws NotFoundException {
+        List<AppointmentResponseDTO> appointments = appointmentService.getDoctorAppointments(doctorId);
+        return ResponseEntity.ok(appointments);
+    }
+    
 }

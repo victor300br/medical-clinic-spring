@@ -184,4 +184,16 @@ public class AppointmentService {
         
         return new AppointmentResponseDTO(appointmentRepository.save(appointment));
     }
+    
+    public List<AppointmentResponseDTO> getDoctorAppointments(Long doctorId) {
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new NotFoundException(Doctor.class, "id", doctorId.toString()));
+        
+        return appointmentRepository.findByDoctor(doctor).stream()
+                .map(AppointmentResponseDTO::new)
+                .collect(Collectors.toList());
+    }
+    
+    
+    
 }

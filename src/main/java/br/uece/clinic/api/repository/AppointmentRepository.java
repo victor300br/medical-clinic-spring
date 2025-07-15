@@ -1,14 +1,17 @@
 package br.uece.clinic.api.repository;
 
+import br.uece.clinic.api.exceptions.NotFoundException;
 import br.uece.clinic.api.model.Appointment;
 import br.uece.clinic.api.model.Doctor;
 import br.uece.clinic.api.model.Patient;
+import br.uece.clinic.api.response.dto.AppointmentResponseDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
@@ -25,4 +28,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     
     boolean existsByDoctorAndDateAndTimeAndStatusIn(
     		Doctor doctor, LocalDate date, LocalTime time, List<Appointment.AppointmentStatus> status);
+    
+    List<Appointment> findByDoctor(Doctor doctor);
+    
+    
 }
