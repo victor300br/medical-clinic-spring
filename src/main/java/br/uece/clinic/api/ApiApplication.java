@@ -1,13 +1,13 @@
-package com.exemple.medical_clinic_spring;
+package br.uece.clinic.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MedicalClinicSpringApplication {
+public class ApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MedicalClinicSpringApplication.class, args);
+		SpringApplication.run(ApiApplication.class, args);
 	}
 
 }
